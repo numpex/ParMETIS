@@ -24,4 +24,4 @@ spack:
   concretizer:
     unify: when_possible
   mirrors:
-    feelpp-buildcache: oci://ghcr.io/feelpp/spack-buildcache
+    numpex-buildcache: oci://ghcr.io/numpex/spack-buildcache
