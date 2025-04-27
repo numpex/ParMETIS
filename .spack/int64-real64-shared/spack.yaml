@@ -14,9 +14,13 @@ spack:
       require: ['openmpi@:4 fabrics=auto']
   definitions:
   - compilers: [gcc@12:]
+  - mpis: ['openmpi@:4.1.6 fabrics=auto']
   - packages: [gklib+shared,metis+shared+int64]
   specs:
   - $compilers
+  - matrix:
+    - [$mpis]
+    - [$%compilers]  
   - matrix:
     - [$packages]
     - [$%compilers]
