@@ -58,7 +58,7 @@ jobs:
           cmake --build --preset ${{ matrix.env_variant }} --target package_source
 
       # 7) upload artifacts
-      - name: Upload METIS artifacts
+      - name: Upload ParMETIS artifacts
         uses: actions/upload-artifact@v4
         with:
           name: metis-artifacts-${{ matrix.env_variant }}
@@ -71,10 +71,9 @@ jobs:
     needs: build
     runs-on: ubuntu-24.04
     steps:
-      - name: Download METIS artifacts
+      - name: Download ParMETIS artifacts
         uses: actions/download-artifact@v4
         with:
-          name: metis-artifacts-${{ matrix.env_variant }}
           path: dist
 
       - name: Create GitHub Release
