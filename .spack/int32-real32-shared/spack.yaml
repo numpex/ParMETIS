@@ -8,14 +8,14 @@ spack:
       padded_length: 128
   packages:
     all:
-      compiler: [gcc@14:, clang@14:]
-      require: ['target=x86_64_v3']
+      compiler: ['gcc@14:', 'clang@14:']
+      require: [target=x86_64_v3]
     mpi:
-      require: ['openmpi@:4.1.6 fabrics=auto']
+      require: [openmpi@:4.1.6 fabrics=auto]
   definitions:
-  - compilers: [gcc@12:]
-  - mpis: ['openmpi@:4.1.6 fabrics=auto']
-  - packages: [gklib+shared,metis+shared~int64]
+  - compilers: ['gcc@14:']
+  - mpis: [openmpi@:4.1.6 fabrics=auto]
+  - packages: [gklib+shared, metis+shared~int64]
   specs:
   - $compilers
   - matrix:
@@ -26,6 +26,6 @@ spack:
     - [$%compilers]
   view: true
   concretizer:
-    unify: when_possible
+    unify: true
   mirrors:
     numpex-buildcache: oci://ghcr.io/numpex/spack-buildcache
