@@ -34,12 +34,13 @@ jobs:
           repo-packages-path: numpex-spack
           mirror:         numpex-buildcache
           mirror-token:   ${{ secrets.GITHUB_TOKEN }}
+          env-path: .spack
           # base-image: ubuntu:24.04
 
       - name: Configure CMake
         shell: spack-bash {0}
         run: |
-          spack env activate numpex-spack/${{ matrix.env_variant }}
+          spack env activate .spack/${{ matrix.env_variant }}
           cmake --preset ${{ matrix.env_variant }}
 
       # 4) build
