@@ -1,0 +1,132 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 21,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "default",
+      "displayName": "Static Release",
+      "description": "Static Release build of METIS",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "BUILD_SHARED_LIBS": "OFF",
+        "IDX64": "OFF",
+        "REAL64": "OFF",
+        "GDB": "OFF",
+        "ASSERT": "OFF",
+        "ASSERT2": "OFF",
+        "DEBUG": "OFF",
+        "GPROF": "OFF",
+        "VALGRIND": "OFF",
+        "OPENMP": "OFF",
+        "GKLIB_PATH": "",
+        "METIS_INSTALL": "ON"
+      }
+    },
+    {
+      "name": "shared",
+      "displayName": "Shared Release",
+      "description": "Shared-library Release build of METIS",
+      "inherits": "default",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "BUILD_SHARED_LIBS": "ON",
+        "CMAKE_RUNTIME_OUTPUT_DIRECTORY": "${sourceDir}/build/${presetName}/bin"
+      }
+    },
+    {
+      "name": "local-gklib",
+      "displayName": "local gklib path",
+      "inherits": "default",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "BUILD_SHARED_LIBS": "ON",
+        "CMAKE_RUNTIME_OUTPUT_DIRECTORY": "${sourceDir}/build/${presetName}/bin",
+        "GKLIB_PATH": "./GKlib"
+      }
+    },
+    {
+      "name": "int64",
+      "hidden": true,
+      "displayName": "64-bit integers",
+      "description": "64-bit integers build of METIS",
+      "inherits": "default",
+      "cacheVariables": {
+        "IDX64": "ON"
+      }
+    },
+    {
+      "name": "real64",
+      "hidden": true,
+      "displayName": "64-bit real numbers",
+      "description": "64-bit real numbers build of METIS",
+      "inherits": "default",
+      "cacheVariables": {
+        "REAL64": "ON"
+      }
+    },
+    {
+      "name": "int32-real32-shared",
+      "displayName": "32-bit index and real numbers (shared)",
+      "description": "32-bit index and real numbers build of METIS",
+      "inherits": ["shared"]
+    },
+    {
+      "name": "int64-real64-shared",
+      "displayName": "64-bit index and real numbers (shared)",
+      "description": "64-bit index and real numbers build of METIS",
+      "inherits": ["int64","real64", "shared"]
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "default",
+      "configurePreset": "default"
+    },
+    {
+      "name": "shared",
+      "configurePreset": "shared"
+    },
+    {
+      "name": "local-gklib",
+      "configurePreset": "local-gklib"
+    },
+    {
+      "name": "int32-real32-shared",
+      "configurePreset": "int32-real32-shared"
+    },
+    {
+      "name": "int64-real64-shared",
+      "configurePreset": "int64-real64-shared"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "default",
+      "configurePreset": "default"
+    },
+    {
+      "name": "shared",
+      "configurePreset": "shared"
+    },
+    {
+      "name": "local-gklib",
+      "configurePreset": "local-gklib"
+    },
+    {
+      "name": "int32-real32-shared",
+      "configurePreset": "int32-real32-shared"
+    },
+    {
+      "name": "int64-real64-shared",
+      "configurePreset": "int64-real64-shared"
+    }
+  ]
+}

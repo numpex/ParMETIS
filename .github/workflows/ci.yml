@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    permissions:
+      packages: write
+    strategy:
+      matrix:
+        env_variant: [int32-real32-shared, int64-real64-shared]
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Prepare Spack & Push Build-Cache
+        uses: numpex/spack-buildcache-action@v1.1.1
+        with:
+          env-variant:    ${{ matrix.env_variant }}
+          repo-packages:  numpex/spack.numpex
+          repo-packages-path: numpex-spack
+          mirror:         numpex-buildcache
+          mirror-token:   ${{ secrets.GITHUB_TOKEN }}
+          # base-image: ubuntu:24.04
+
+      - name: Configure CMake
+        shell: spack-bash {0}
+        run: |
+          spack env activate numpex-spack/${{ matrix.env_variant }}
+          cmake --preset ${{ matrix.env_variant }}
+
+      # 4) build
+      - name: Build
+        run: cmake --build --preset ${{ matrix.env_variant }} --parallel
+
+      # 5) test
+      - name: Test
+        run: ctest --preset ${{ matrix.env_variant }} --output-on-failure
+
+      # 6) package via CPack
+      - name: Package with CPack
+        run: |
+          cmake --build --preset ${{ matrix.env_variant }} --target package
+          cmake --build --preset ${{ matrix.env_variant }} --target package_source
+
+      # 7) upload artifacts
+      - name: Upload METIS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: metis-artifacts-${{ matrix.env_variant }}
+          path: |
+            build/${{ matrix.env_variant }}/*.tar.gz
+            build/${{ matrix.env_variant }}/*.zip
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: build
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Download METIS artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: metis-artifacts-${{ matrix.env_variant }}
+          path: dist
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*.tar.gz
+            dist/*.zip
+          draft: false
+          prerelease: ${{ contains(github.ref, '-rc') || contains(github.ref, '-alpha') || contains(github.ref, '-beta') }}
+          name: Release ${{ github.ref_name }}
+          generate_release_notes: true
+          tag_name: ${{ github.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
