@@ -27,7 +27,7 @@ jobs:
         with:
           submodules: true
       - name: Prepare Spack & Push Build-Cache
-        uses: numpex/spack-buildcache-action@v1.1.1
+        uses: numpex/spack-buildcache-action@v1.1.2
         with:
           env-variant:    ${{ matrix.env_variant }}
           repo-packages:  numpex/spack.numpex
