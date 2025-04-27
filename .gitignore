@@ -60,4 +60,3 @@ graphs/*.npart.*
 .svn/
 
 .spack-env
-spack.lock
