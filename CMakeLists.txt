@@ -6,7 +6,7 @@ project(ParMETIS
 )
 
 
-set(ParMETIS_PRERELEASE "-rc.2")
+set(ParMETIS_PRERELEASE "-rc.3")
 set(ParMETIS_VERSION_STRING "${PROJECT_VERSION}${ParMETIS_PRERELEASE}")
 set(ParMETIS_VERSION_MAJOR 5)
 set(ParMETIS_VERSION_MINOR 3)
@@ -19,10 +19,7 @@ set(ParMETIS_VERSION_NUMBER
 # -----------------------------------------------------------------------------
 # 1) Options
 # -----------------------------------------------------------------------------
-option(BUILD_SHARED_LIBS
-  "Build ParMETIS as a shared library (default OFF → static)"
-  OFF
-)
+
 option(IDX64      "enable 64‑bit indices (IDXTYPEWIDTH=64)"   OFF)
 option(REAL64     "enable 64‑bit reals   (REALTYPEWIDTH=64)" OFF)
 option(SHARED     "build shared library"                     OFF)
@@ -34,7 +31,10 @@ option(GPROF      "enable gprof profiling"                  OFF)
 option(VALGRIND   "enable valgrind instrumentation"         OFF)
 option(OPENMP     "enable OpenMP support"                   OFF)
 
-
+option(BUILD_SHARED_LIBS
+  "Build ParMETIS as a shared library (default OFF → static)"
+  ${SHARED}
+)
 # -----------------------------------------------------------------------------
 # 2) Map options to compile-time widths
 # -----------------------------------------------------------------------------
