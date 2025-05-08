@@ -59,3 +59,4 @@ graphs/*.epart.*
 graphs/*.npart.*
 .svn/
 
+.spack-env
